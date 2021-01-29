@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>ROTAS</title>
+    <title>Cad DEVs</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -34,11 +34,11 @@
           <ul class="nav navbar-nav">          
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                    Distâncias <span class="caret"></span>
+                    Cadastros <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a href="<?php echo BASEURL; ?>customers">Gerenciar Distâncias</a></li>
-                    <li><a href="<?php echo BASEURL; ?>customers/add.php">Nova Distância</a></li>
+                    <li><a href="<?php echo BASEURL; ?>customers">Gerenciar Cadastros</a></li>
+                    <li><a href="<?php echo BASEURL; ?>customers/add.php">Novo Cadastro</a></li>
                 </ul>
             </li>
           </ul>
