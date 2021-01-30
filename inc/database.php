@@ -19,8 +19,6 @@ function close_database($conn) {
 		echo $e->getMessage();
 	}
 }
-
-
 /**
  *  Pesquisa um Registro pelo ID em uma Tabela
  */
@@ -61,7 +59,6 @@ function find( $table = null, $id = null ) {
 	close_database($database);
 	return $found;
 }
-
 
 /**
  *  Pesquisa Todos os Registros de uma Tabela

@@ -2,31 +2,31 @@
 
 require_once('../config.php');
 require_once(DBAPI);
-$ceps = null;
-$cep = null;
+$candidatos = null;
+$candidato = null;
 /**
  *  Listagem de Clientes
  */
 function index() {
-	global $ceps;
-	$ceps = find_all('ceps');
+	global $candidatos;
+	$candidatos = find_all('candidatos');
 }
 /**
  *  Cadastro de Clientes
  */
-function add($cePs) {
+function add($candidatos) {
        
-    if(isset ($cePs))
+    if(isset ($candidatos))
         {
 
-      if (!empty($cePs)) {
+      if (!empty($candidatos)) {
 
         $today = date_create('now', new DateTimeZone('America/Sao_Paulo'));
 
      //   $cePs = $_POST['cePs'];
-        $cePs['modificado'] = $cePs['criado'] = $today->format("Y-m-d H:i:s");
+        $cePs['modificado'] = $candidatos['criado'] = $today->format("Y-m-d H:i:s");
 
-          save('ceps', $cePs);
+          save('candidatos', $candidatos);
         header('location: index.php');
       }
     }
@@ -76,16 +76,16 @@ function edit() {
  *  Visualização de um Cliente
  */
 function view($id = null) {
-  global $cep;
-  $cep = find('ceps', $id);
+  global $candidatos;
+  $candidatos = find('candidatos', $id);
 }
 /**
  *  Exclusão de um Cliente
  */
 function delete($id = null) {
 
-  global $cep;
-  $cep = remove('ceps', $id);
+  global $candidatos;
+  $candidatos = remove('candidatos', $id);
  // if( remove('ceps', $id))
 
  // header('location: add.php');

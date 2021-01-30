@@ -3,8 +3,8 @@
     index();
 if (session_status() !== PHP_SESSION_ACTIVE) {//Verificar se a sessão não já está aberta.
 session_start();}
-if(isset ($_SESSION['cepOrig'])) unset($_SESSION['cepOrig']);
-if(isset ($_SESSION['cepD'])) unset($_SESSION['cepD']);
+if(isset ($_SESSION['candidatoOrig'])) unset($_SESSION['candidatoOrig']);
+if(isset ($_SESSION['candidatoD'])) unset($_SESSION['candidatoD']);
 ?>
 
 <?php include(HEADER_TEMPLATE); ?>
@@ -12,10 +12,10 @@ if(isset ($_SESSION['cepD'])) unset($_SESSION['cepD']);
 <header>
 	<div class="row">
 		<div class="col-sm-6">
-			<h2>Distâncias de CEPs</h2>
+			<h2>Cadastro de candidatos</h2>
 		</div>
 		<div class="col-sm-6 text-right h2">
-	    	<a class="btn btn-primary" href="add.php"><i class="fa fa-plus"></i> Nova Distância</a>
+	    	<a class="btn btn-primary" href="add.php"><i class="fa fa-plus"></i> Novo Cadastro</a>
 	    	<a class="btn btn-default" href="index.php"><i class="fa fa-refresh"></i> Atualizar</a>
 	    </div>
 	</div>
@@ -34,29 +34,27 @@ if(isset ($_SESSION['cepD'])) unset($_SESSION['cepD']);
 <table class="table table-hover">
 <thead>
 	<tr>
-		<th>ID</th>
-		<th >Origem</th>
-		<th>Destino</th>
-		<th>Distância Km</th>
-		<th>Criado em</th>
-		<th>Modificado em</th>
-		<th>Opções</th>
+		<th> # </th>
+		<th style=" width: 15%;">Nome</th>
+		<th>idade</th>
+		<th>Linkedin</th>
+		<th style=" width: 25%;">Aptidões</th>
+		<th style=" width: 25%;">Opções</th>
 	</tr>
 </thead>
 <tbody>
-<?php if ($ceps) : ?>
-<?php foreach ($ceps as $cep) : ?>
+<?php if ($candidatos) : ?>
+<?php foreach ($candidatos as $candidato) : ?>
 	<tr>
-		<td><?php echo $cep['id']; ?></td>
-		<td><?php echo $cep['cepOrig']; ?></td>
-		<td><?php echo $cep['cepDest']; ?></td>
-		<td><?php echo number_format($cep['dist'], 2, ',', '.'); ?></td>
-		<td><?php echo date("d/m/Y H:i", strtotime( $cep['criado'])); ?></td>
-		<td><?php echo date("d/m/Y H:i", strtotime( $cep['modificado'])); ?></td>
+		<td><?php echo $candidato['id']; ?></td>
+		<td><?php echo $candidato['nome'];  ?></td>
+		<td><?php echo $candidato['idade']; ?></td>
+		<td><?php echo $candidato['Url_linkedin'];    ?></td>
+		<td><?php echo $candidato['tecnologias'];     ?></td>
 		<td class="actions text-right">
-			<a href="view.php?id=<?php echo $cep['id']; ?>" class="btn btn-sm btn-success"><i class="fa fa-eye"></i> Visualizar</a>
-			<a href="edit.php?id=<?php echo $cep['id']; ?>" class="btn btn-sm btn-warning"><i class="fa fa-pencil"></i> Editar</a>
-			<a href="#" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete-modal" data-cep="<?php echo $cep['id']; ?>" data-cep1="<?php echo $cep['cepOrig']; ?>" data-cep2="<?php echo $cep['cepDest']; ?>">
+			<a href="view.php?id=<?php echo $candidato['id']; ?>" class="btn btn-sm btn-success"><i class="fa fa-eye"></i> Visualizar</a>
+			<a href="edit.php?id=<?php echo $candidato['id']; ?>" class="btn btn-sm btn-warning"><i class="fa fa-pencil"></i> Editar</a>
+			<a href="#" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete-modal" data-id="<?php echo $candidato['id']; ?>"  data-nome="<?php echo $candidato['nome']; ?>" >
 				<i class="fa fa-trash"></i> Excluir
 			</a>
 		</td>
@@ -69,11 +67,6 @@ if(isset ($_SESSION['cepD'])) unset($_SESSION['cepD']);
 <?php endif; ?>
 </tbody>
 </table>
-<?php 
-/*
-*/
-  //  include('modal.php'); 
-?>
 <!-- Modal de Delete-->
 <div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
   <div class="modal-dialog" role="document">
@@ -83,7 +76,7 @@ if(isset ($_SESSION['cepD'])) unset($_SESSION['cepD']);
         <h4 class="modal-title" id="modalLabel">Excluir Cadastro</h4>
       </div>
       <div class="modal-body">
-        Deseja realmente excluir este Cadastro?
+        Deseja realmente excluir este Cadastross?
       </div>
       <div class="modal-footer">
         <a id="confirm" class="btn btn-primary" href="#">Sim</a>

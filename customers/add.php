@@ -1,3 +1,9 @@
+	
+<style>
+.badgebox{ opacity: 0;}.badgebox + .badge{text-indent: -999999px;width: 27px;}
+.badgebox:focus + .badge{ box-shadow: inset 0px 0px 5px;}
+.badgebox:checked + .badge{text-indent: 0;}
+</style>
 
 <?php 
 
@@ -115,97 +121,49 @@ if(isset ($_GET['cepOrigID']))
         if( $calc == 1)
          $distancia =   calcDistancia($lat1, $longt1, $lat2, $longt2);
     ?>
-<form action="add.php" name="NomedoForm" method="get" action=".">
-  <div class="row col-md-6" >
-  <div class="row" >
-      
-    <h4>Cep Origem</h4>
- </div>
-    <body>
-    <!-- Inicio do formulario GET (CONSULTA)-->
-       
-        <label>Latitude:
-        <input name="latitude1" type="text" id="latitude1" size="20" value="<?php echo $lat1 ?>" readonly/></label><br />
-        <label>Longitude:
-        <input name="longitude1" type="text" id="longitude1" size="20" value="<?php echo $longt1 ?>" readonly/></label><br />
-        <label>Logradouro:
-        <input name="rua1" type="text" id="rua1" size="30"  value="<?php echo $rua1 ?>" readonly/></label><br />
-        <label>Cidade:
-        <input name="cidade1" type="text" id="cidade1" size="30" value="<?php echo $cidade1 ?>" readonly/></label><br />
-        <input name="endOrig" type="text" id="endOrig" size="30" value="<?php echo $end1 ?>" />
-      
-    </body>
- </div>
-
-  <div class="row col-md-6" >
-  <div class="row" >
-      
-    <h4>Cep Destino</h4>
- </div>
-    <body>
-    <!-- Inicio do formulario -->
-       
-        <label>Latitude:
-        <input name="latitude2" type="text" id="latitude2" size="20"  value="<?php echo $lat2 ?>" readonly/><span class="required">*</span></label><br />
-        <label>Longitude:
-        <input name="longitude2" type="text" id="longitude2" size="20" value="<?php echo $longt2 ?>"  readonly/></label><br />
-        <label>Logradouro:
-        <input name="rua2" type="text" id="rua2" size="30" value="<?php echo $rua2 ?>" readonly/></label><br />
-        <label>Cidade:
-        <input name="cidade2" type="text" id="cidade2" size="30" value="<?php echo $cidade2 ?>" readonly /></label>
-        <br />
-        <input name="endDest" type="text" id="endDest" size="30" value="<?php echo $end2 ?>" />
-      
-    </body>
- </div>    
+<form action="add.php" method="post" >
+    <!-- Inicio do formulario POST (CADASTRO)-->
+  
+<div class="row col-md-10" >    
 <h2>Nova Distância</h2>
   <!-- area de campos do form -->
   <hr />
   <div class="row" >
-    <div class="form-group col-md-2">
-      <label for="name">CEP de Origem</label>
-      <input id="cepOrig" type="text" class="form-control"  value="<?php echo $cepOrig ?>" size="10" maxlength="9" onblur="pesquisacep1(this.value,1);" name="cepOrig">
-      <input id="cepOrigID"  name="cepOrigID"  type="hidden" class="form-control"   value="<?php echo $cepOrigID ?>"/>
-      <input id="cepDID"     name="cepDID"     type="hidden" class="form-control"   value="<?php echo $cepDID ?>" />
+    <div class="form-group col-md-11">
+      <label for="name"> Nome Completo</label>
+      <input id="cepOrig" type="text" class="form-control"  value="" name="nome">
     </div>
-
-    <div class="form-group col-md-2">
-      <label for="campo2">CEP de Destino</label>
-      <input id="cepD" type="text" class="form-control"  value="<?php echo $cepD ?>" size="10" maxlength="9"
-               onblur="pesquisacep1(this.value,2);"  name="cepD">
+ 
+    <div class="form-group col-md-3">
+      <label for="campo3">Data de Nascimento</label>
+      <input type="dateTimepiker" class="form-control" name="datNasc" value="<?php echo date("d/m/Y"); ?>">
+    </div>        
+    
+    <div class="form-group col-md-8">
+      <label for="campo3"> Likedin</label>
+      <input type="text" class="form-control" name="linkedin" value="" >
     </div>
-
-    <div class="form-group col-md-2">
-      <label for="campo3">Distância em Km</label>
-      <input type="text" class="form-control" name="distancia" readonly value="<?php echo number_format($distancia, 2, ',', '.'); ?>" >
-    </div>
-  </div>  
-  <div class="row">  
-    <div class="form-group col-md-2">
-      <label for="campo3">Data de Cadastro</label>
-      <input type="dateTimepiker" class="form-control" name="criado" value="<?php echo date("d/m/Y H:i:s"); ?>" disabled>
-    </div>    
-  </div>  
-  
-</form>
-
-<form action="add.php" method="post" >
-    <!-- Inicio do formulario POST (CADASTRO)-->
-  <hr />
-  <div class="row" >
-      <input id="cepO" type="hidden" class="form-control" name="cepOrig" value="<?php echo $cepOrig ?>"/>
-      <input id="latd1" type="hidden" class="form-control" name="latd1" value="<?php echo $lat1 ?>" />
-      <input id="longd1" type="hidden" class="form-control" name="longd1" value="<?php echo $longt1 ?>"/>
-      <input id="end1" type="hidden" class="form-control" name="end1" value="<?php echo $end1 ?>"/>
-      
-      <input id="cepD" type="hidden" class="form-control" name="cepDest" value="<?php echo $cepD ?>" />
-      <input id="latd2" type="hidden" class="form-control" name="latd2" value="<?php echo $lat2 ?>"/>
-      <input id="longd2" type="hidden" class="form-control" name="longd2" value="<?php echo $longt2 ?>" />
-      <input id="end2" type="hidden" class="form-control" name="end2" value="<?php echo $end2 ?>"/>
-      <input type="hidden" class="form-control" name="dist"   value="<?php echo $distancia; ?>" />
-      <input type="hidden" class="form-control" name="criado" value="<?php echo date("d/m/Y H:i"); ?>" >
-  </div>  
-  
+  </div>    
+  </div> 
+  <div class="row" >  
+    <div class="form-group col-md-8">
+      <label for="campo3"> Tecnologias</label><br/>
+    <div class="form-group col-md-3">
+       <label class="btn btn-default" submit><input name="tec" type="checkbox" value="tec" class="badgebox" style="margin-top:5px;"/> <span class="badge" >&check;</span> C#:</label><br/>
+       <label class="btn btn-default" submit><input name="tec" type="checkbox" value="tec" class="badgebox" style="margin-top:5px;"/> <span class="badge" >&check;</span> Javascript:</label><br/>
+       <label class="btn btn-default" submit><input name="tec" type="checkbox" value="tec" class="badgebox" style="margin-top:5px;"/> <span class="badge" >&check;</span> Nodejs:</label><br/>
+       <label class="btn btn-default" submit><input name="tec" type="checkbox" value="tec" class="badgebox" style="margin-top:5px;"/> <span class="badge" >&check;</span> Angular:</label><br/>
+       <label class="btn btn-default" submit><input name="tec" type="checkbox" value="tec" class="badgebox" style="margin-top:5px;"/> <span class="badge" >&check;</span> React:</label><br/>
+    </div> 
+    <div class="form-group col-md-3">  
+       <label class="btn btn-default" submit><input name="tec" type="checkbox" value="tec" class="badgebox" style="margin-top:5px;"/> <span class="badge" >&check;</span> Ionic:</label><br/>
+       <label class="btn btn-default" submit><input name="tec" type="checkbox" value="tec" class="badgebox" style="margin-top:5px;"/> <span class="badge" >&check;</span> Mensageria:</label><br/>
+       <label class="btn btn-default" submit><input name="tec" type="checkbox" value="tec" class="badgebox" style="margin-top:5px;"/> <span class="badge" >&check;</span> PHP:</label><br/>
+       <label class="btn btn-default" submit><input name="tec" type="checkbox" value="tec" class="badgebox" style="margin-top:5px;"/> <span class="badge" >&check;</span> Laravel:</label><br/>
+  </div> 
+  </div> 
+  </div> 
+    
   <div id="actions" class="row">
     <div class="col-md-12">
       <button type="submit" id="salvar"  <?php echo $desabled ?>  class="btn btn-primary">Salvar</button>
