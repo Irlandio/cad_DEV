@@ -22,13 +22,13 @@ function close_database($conn) {
 /**
  *  Pesquisa um Registro pelo ID em uma Tabela
  */
-function find( $table = null, $id = null ) {
+function find( $table = null, $id = null, $ord = null ,$tec = null ) {
   
 	$database = open_database();
 	$found = null;
 
 	try {
-	  if ($id) {
+	  if ($id && $id != 0.1 ) {
 	    $sql = "SELECT * FROM " . $table . " WHERE id = " . $id;
 	    $result = $database->query($sql);
 	    
@@ -37,7 +37,15 @@ function find( $table = null, $id = null ) {
 	    }
 	    
 	  } else {
+	    if ($id) {
+	    $sql = "SELECT * FROM " . $table .$tec." ORDER BY ".$ord;
+	    $result = $database->query($sql);
 	    
+	    if ($result->num_rows > 0) {
+	      $found = $result->fetch_all(MYSQLI_ASSOC);
+            
+          }  
+          }else {
 	    $sql = "SELECT * FROM " . $table;
 	    $result = $database->query($sql);
 	    
@@ -49,8 +57,10 @@ function find( $table = null, $id = null ) {
         while ($row = $result->fetch_assoc()) {
           array_push($found, $row);
         } */
-	    }
+	    
+          }
 	  }
+	} 
 	} catch (Exception $e) {
 	  $_SESSION['message'] = $e->GetMessage();
 	  $_SESSION['type'] = 'danger';
@@ -63,8 +73,13 @@ function find( $table = null, $id = null ) {
 /**
  *  Pesquisa Todos os Registros de uma Tabela
  */
-function find_all( $table ) {
-  return find($table);
+function find_all( $table, $ord = null,$tec = null  ) {
+    if($ord)
+        return find($table, $id = 0.1, $ord, $tec);
+    else
+        return find($table);
+        
+        
 }
 /**
 *  Insere um registro no BD
@@ -92,7 +107,7 @@ function save($table = null, $data = null) {
   try {
     $database->query($sql);
 
-    $_SESSION['message'] = 'Registro cadastrado com sucesso.';
+    $_SESSION['message'] = 'Registro cadastrado com sucesso!';
     $_SESSION['type'] = 'success';
   
   } catch (Exception $e) { 

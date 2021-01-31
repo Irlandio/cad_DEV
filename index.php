@@ -11,7 +11,7 @@ if(isset ($_SESSION['cepOrig'])) unset($_SESSION['cepOrig']);
 if(isset ($_SESSION['cepD'])) unset($_SESSION['cepD']);
 ?>
 
-<h1>Rotas</h1>
+<h1>Cadastro de candidatos</h1>
 <hr />
 
 <?php if ($db) : ?>
@@ -23,7 +23,7 @@ if(isset ($_SESSION['cepD'])) unset($_SESSION['cepD']);
 					<i class="fa fa-plus fa-5x"></i>
 				</div>
 				<div class="col-xs-12 text-center">
-					<p>Nova Distância</p>
+					<p>Novo Cadastro</p>
 				</div>
 			</div>
 		</a>
@@ -33,10 +33,10 @@ if(isset ($_SESSION['cepD'])) unset($_SESSION['cepD']);
 		<a href="customers" class="btn btn-default">
 			<div class="row">
 				<div class="col-xs-12 text-center">
-					<i class="fa fa-map fa-5x"></i>
+					<i class="fa fa-list fa-5x"></i>
 				</div>
 				<div class="col-xs-12 text-center">
-					<p>Distância</p>
+					<p>Cadastros</p>
 				</div>
 			</div>
 		</a>

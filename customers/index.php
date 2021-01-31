@@ -1,20 +1,35 @@
 <?php
     require_once('functions.php');
+require_once('modal.php');
     index();
-if (session_status() !== PHP_SESSION_ACTIVE) {//Verificar se a sessão não já está aberta.
-session_start();}
-if(isset ($_SESSION['candidatoOrig'])) unset($_SESSION['candidatoOrig']);
-if(isset ($_SESSION['candidatoD'])) unset($_SESSION['candidatoD']);
-?>
+$ord = "id";
+if(isset($_SESSION['ord'])) $ord = $_SESSION['ord'];
 
-<?php include(HEADER_TEMPLATE); ?>
+ include(HEADER_TEMPLATE); ?>
 
 <header>
 	<div class="row">
-		<div class="col-sm-6">
+		<div class="col-sm-4">
 			<h2>Cadastro de candidatos</h2>
 		</div>
-		<div class="col-sm-6 text-right h2">
+		<div class="col-sm-8 text-right h2">
+        <form action="index.php"  name="NForm"  method="get" >
+            <!-- Inicio do formulario POST (CADASTRO)-->
+            <div class="form-group col-md-2">
+                   <button type="submit" class="btn btn-primary">Ordenar</button>
+                </div>
+            <div class="form-group col-md-4">
+                   <select name="ord" id="ord" class="form-control">
+                        <option value="<?php echo $ord; ?>"> <?php echo $ord; ?></option>
+                        <option value="id"> Por Cadastro</option>
+                        <option value="nome"> Por Nome</option>
+                        <option value="tecnologias"> Por Tecnologias</option>
+                        </select> 
+            </div>
+        </form>
+        
+        <a href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#filtrar-modal" data-id="<?php echo $ord; ?>"  data-nome="Teste" ><i class="fa fa-filter"></i> Filtrar</a>
+        
 	    	<a class="btn btn-primary" href="add.php"><i class="fa fa-plus"></i> Novo Cadastro</a>
 	    	<a class="btn btn-default" href="index.php"><i class="fa fa-refresh"></i> Atualizar</a>
 	    </div>
@@ -67,23 +82,6 @@ if(isset ($_SESSION['candidatoD'])) unset($_SESSION['candidatoD']);
 <?php endif; ?>
 </tbody>
 </table>
-<!-- Modal de Delete-->
-<div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="modalLabel">Excluir Cadastro</h4>
-      </div>
-      <div class="modal-body">
-        Deseja realmente excluir este Cadastross?
-      </div>
-      <div class="modal-footer">
-        <a id="confirm" class="btn btn-primary" href="#">Sim</a>
-        <a id="cancel" class="btn btn-default" data-dismiss="modal">N&atilde;o</a>
-      </div>
-    </div>
-  </div>
-</div> <!-- /.modal -->
+
 <?php 
 include(FOOTER_TEMPLATE); ?>

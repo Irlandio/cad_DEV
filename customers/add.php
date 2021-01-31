@@ -1,10 +1,9 @@
-	
+
 <style>
 .badgebox{ opacity: 0;}.badgebox + .badge{text-indent: -999999px;width: 27px;}
 .badgebox:focus + .badge{ box-shadow: inset 0px 0px 5px;}
 .badgebox:checked + .badge{text-indent: 0;}
 </style>
-
 <?php 
 
   require_once('functions.php'); 
@@ -12,166 +11,160 @@
 if (session_status() !== PHP_SESSION_ACTIVE) {//Verificar se a sessão não já está aberta.
 session_start();
 }
-if(isset ($_GET['cepOrigID']))
-    verificaCamposGET();
+   if(isset ($_POST['nome']))
+   verificacamposPOST("add");
 
-   if(isset ($_POST['cepOrig']))
-   verificacamposPOST();
+$nome = $email = $datNasc = $linkedin = $idade = $tec = "";
+$c = $javascript = $nodejs = $angular = $react = $ionic = $mensageria = $pHP = $laravel = " ";
+   if(isset ($_SESSION['nome']))    $nome      = $_SESSION['nome'];
+   if(isset ($_SESSION['email']))   $email     = $_SESSION['email'];
+   if(isset ($_SESSION['datNasc'])) $datNasc   = $_SESSION['datNasc'];
+   if(isset ($_SESSION['linkedin']))$linkedin  = $_SESSION['linkedin'];
+   if(isset ($_SESSION['idade']))   $idade     = $_SESSION['idade'];
+   if(isset ($_SESSION['tecno']))   $tec       = $_SESSION['tecno'];
+
+    if (strpos($tec, 'C#')          !== false) {$c          = 'checked';}
+    if (strpos($tec, 'Javascript')  !== false) {$javascript = 'checked';}
+    if (strpos($tec, 'Nodejs')      !== false) {$nodejs     = 'checked';}
+    if (strpos($tec, 'Angular')     !== false) {$angular    = 'checked';}
+    if (strpos($tec, 'React')       !== false) {$react      = 'checked';}
+    if (strpos($tec, 'Ionic')       !== false) {$ionic      = 'checked';}
+    if (strpos($tec, 'Mensageria')  !== false) {$mensageria = 'checked';}
+    if (strpos($tec, 'PHP')         !== false) {$pHP        = 'checked';}
+    if (strpos($tec, 'Laravel')     !== false) {$laravel    = 'checked';}
+
+//C#,Javascript,Nodejs,Angular,React,Ionic,Mensageria,PHP,Laravel
 ?>
 <?php include(HEADER_TEMPLATE); ?>
 
     <head>
-    <title>CEP da Rota</title>
+    <title>Candidato</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-    <!-- Adicionando Javascript -->
-    <script>
-    
-    function limpa_formulario_cep(campo) {
-          //  Limpa valores do formulário de cep.
-                document.getElementById("latitude"+campo).value="";
-                document.getElementById("longitude"+campo).value="";
-                document.getElementById("rua"+campo).value="";
-                document.getElementById("cidade"+campo).value="";
-                document.getElementById("uf"+campo).value="";              
-    }
-    function pesquisacep1(valor,campo) {
-        //Nova variável "cep" somente com dígitos.
-        var cep = valor.replace(/\D/g, '');
-        //Verifica se campo cep possui valor informado.
-        if (cep != "") {
-            //Expressão regular para validar o CEP.
-            var validacep = /^[0-9]{8}$/;
-            //Valida o formato do CEP.
-            if(validacep.test(cep)) {
-                if(campo == 1)
-                    {
-                    document.getElementById("cepOrigID").value=document.getElementById("cepOrig").value;
-                    document.getElementById("cepDID").value="0";
-                    }
-                    else  
-                        if(campo == 2)
-                    {
-                    document.getElementById("cepDID").value=document.getElementById("cepD").value;
-                    document.getElementById("cepOrigID").value="0";
-                    }                
-                
-                
-                //Preenche os campos com "..." enquanto consulta webservice.
-                document.getElementById("latitude"+campo).value="Aguard...";
-                document.getElementById("longitude"+campo).value="...";
-                document.getElementById("rua"+campo).value="...";
-                document.getElementById("cidade"+campo).value="...";               
-                //Executa um submit de botão.
-                document.NomedoForm.submit(); 
-                //Cria um elemento javascript.
-                var script = document.createElement('script');
-                      
-            } 
-            else {                
-            alert("CEP invalido.");
-            limpa_formulario_cep(campo);
-            }
-        } 
-        else {              
-            alert("CEP invalido.");
-            limpa_formulario_cep(campo);
-        }
-    };
-      function submitform() {
-        document.NomedoForm.submit();
-    }
-    </script>
-    
     </head>
-<?php
-        $calc = 1; 
-        $distancia =  "0";
-            $end1 = "";   $end2 = "";
-// Condição para calcular a distância. Caso algum dado não tenha então recebe zero(0) e não calcula
-     if(isset ($_SESSION['cepOrigID'])) { $cepOrigID = $_SESSION['cepOrigID']; }
-     if(isset ($_SESSION['cepOrig']))   
-         { $cepOrig  = $_SESSION['cepOrig']; 
-         if(isset ($_SESSION['longt1']))  { $longt1   = $_SESSION['longt1']; }    else { $longt1  = "";    $calc = 0;}
-         if(isset ($_SESSION['lat1']))    { $lat1     = $_SESSION['lat1']; }      else { $lat1    = "";    $calc = 0;}
-         if(isset ($_SESSION['logra1']))  { $rua1     = $_SESSION['logra1']; }    else  $rua1     = "..";
-         if(isset ($_SESSION['cidade1'])) { $cidade1  = $_SESSION['cidade1']; }   else  $cidade1  = ".";
-       //  if(isset ($_SESSION['estado1'])) { $estado1  = $_SESSION['estado1']; }else  $estado1 = "";
-          $end1 = ";";
-          if(($cidade1 != "."))
-            $end1 = $rua1.', '.$cidade1;
 
-         if(isset ($_SESSION['cepDID']))  { $cepDID   = $_SESSION['cepDID']; } else  $cepDID  = "0";
-         if(isset ($_SESSION['cepD']))    { $cepD     = $_SESSION['cepD']; }   else  $cepD    = "";
-        if(isset ($_SESSION['longt2']))   { $longt2   = $_SESSION['longt2']; } else { $longt2 = "";    $calc = 0;}
-         if(isset ($_SESSION['lat2']))    { $lat2     = $_SESSION['lat2']; }   else { $lat2   = "";     $calc = 0;}
-         if(isset ($_SESSION['logra2']))  { $rua2     = $_SESSION['logra2']; } else  $rua2    = "..";
-         if(isset ($_SESSION['cidade2'])) { $cidade2  = $_SESSION['cidade2']; }else  $cidade2 = "..";
-        // if(isset ($_SESSION['estado2'])) { $estado2  = $_SESSION['estado2']; }else  $estado2 = "";
-          
-        $end2 = $rua2.', '.$cidade2;
-
-        if (!is_numeric($lat1) || !is_numeric($longt1) || !is_numeric($lat2) || !is_numeric($longt2)) $calc = 0;
-        }else 
-         { $cepOrigID = "0";$cepOrig  = $lat1    =$longt1  = $rua1  = $cidade1  = $estado1 = ""; $calc = 0;
-         $cepDID = "0";$cepD  = $lat2    =$longt2  = $rua2  = $cidade2  = "";
-         }
-         if($lat1 != "" && $lat2 != "" ) $desabled = ""; else $desabled = "disabled";
-
-        if( $calc == 1)
-         $distancia =   calcDistancia($lat1, $longt1, $lat2, $longt2);
-    ?>
-<form action="add.php" method="post" >
+<form action="add.php"  name="NForm"  method="post" >
     <!-- Inicio do formulario POST (CADASTRO)-->
   
 <div class="row col-md-10" >    
-<h2>Nova Distância</h2>
+<h2>Novo Cadastro</h2>
   <!-- area de campos do form -->
   <hr />
   <div class="row" >
     <div class="form-group col-md-11">
       <label for="name"> Nome Completo</label>
-      <input id="cepOrig" type="text" class="form-control"  value="" name="nome">
+      <input id="nome" type="text" class="form-control"  value="<?php echo $nome ?>" name="nome" autofocus onblur="verificanome(this);">
+    </div>	  
+    <div class="form-group col-md-11" id="myModal">
+      <label for="email"> E-mail</label>
+      <input id="email1" type="email" class="form-control" value="<?php echo $email ?>" name="email1" required  onblur="verificaemail(this,1);" Placeholder="fulano@email.com">
+    </div>
+    <div class="form-group col-md-11">
+      <input id="email2" type="email" class="form-control" value="<?php echo $email ?>" name="email2" required Placeholder="Repita seu E-mail"  onblur="verificaemail(this,2);">
     </div>
  
-    <div class="form-group col-md-3">
-      <label for="campo3">Data de Nascimento</label>
-      <input type="dateTimepiker" class="form-control" name="datNasc" value="<?php echo date("d/m/Y"); ?>">
+    <div class="form-group col-md-2">
+      <label for="campo3">Data de Nasc.</label>
+      <input type="date" class="form-control" name="datNasc" id="datNasc" value="<?php echo $datNasc ?>" onblur="calculaIdade(this.value);" min="1920-01-01" max="<?php echo date('Y-m-d', strtotime('-15 year')); ?>" required> <span class="validity"></span>
+    </div>     
+    <div class="form-group col-md-7">
+      <label for="campo3"> Likedin</label><br>
+           <input type="text" class="form-control" name="linkedin" value="<?php echo $linkedin ?>" Placeholder="www.linkedin.com/in/www.linkedin.com/in/Fulano-De-Tal-999990025/">
+    </div>       
+    <div class="form-group col-md-1">
+      <label for="campo3">Idade</label>
+      <input type="text" class="form-control" readonly name="idade" id="idade" value="<?php echo $idade ?>" >
     </div>        
-    
-    <div class="form-group col-md-8">
-      <label for="campo3"> Likedin</label>
-      <input type="text" class="form-control" name="linkedin" value="" >
-    </div>
   </div>    
   </div> 
   <div class="row" >  
     <div class="form-group col-md-8">
       <label for="campo3"> Tecnologias</label><br/>
     <div class="form-group col-md-3">
-       <label class="btn btn-default" submit><input name="tec" type="checkbox" value="tec" class="badgebox" style="margin-top:5px;"/> <span class="badge" >&check;</span> C#:</label><br/>
-       <label class="btn btn-default" submit><input name="tec" type="checkbox" value="tec" class="badgebox" style="margin-top:5px;"/> <span class="badge" >&check;</span> Javascript:</label><br/>
-       <label class="btn btn-default" submit><input name="tec" type="checkbox" value="tec" class="badgebox" style="margin-top:5px;"/> <span class="badge" >&check;</span> Nodejs:</label><br/>
-       <label class="btn btn-default" submit><input name="tec" type="checkbox" value="tec" class="badgebox" style="margin-top:5px;"/> <span class="badge" >&check;</span> Angular:</label><br/>
-       <label class="btn btn-default" submit><input name="tec" type="checkbox" value="tec" class="badgebox" style="margin-top:5px;"/> <span class="badge" >&check;</span> React:</label><br/>
+       <label class="btn btn-default" submit><input name="tec[]" type="checkbox" value="C#" class="badgebox" 
+       <?php echo $c ?> style="margin-top:5px;"/> <span class="badge" >&check;</span> C#:</label><br/>
+       <label class="btn btn-default" submit><input name="tec[]" type="checkbox" value="Javascript" class="badgebox" 
+       <?php echo $javascript ?> style="margin-top:5px;"/> <span class="badge" >&check;</span> Javascript:</label><br/>
+       <label class="btn btn-default" submit><input name="tec[]" type="checkbox" value="Nodejs" class="badgebox" 
+       <?php echo $nodejs ?> style="margin-top:5px;"/> <span class="badge" >&check;</span> Nodejs:</label><br/>
+    </div> 
+    <div class="form-group col-md-3">
+       <label class="btn btn-default" submit><input name="tec[]" type="checkbox" value="Angular" class="badgebox" 
+       <?php echo $angular ?> style="margin-top:5px;"/> <span class="badge" >&check;</span> Angular:</label><br/>
+       <label class="btn btn-default" submit><input name="tec[]" type="checkbox" value="React" class="badgebox" 
+       <?php echo $react ?> style="margin-top:5px;"/> <span class="badge" >&check;</span> React:</label><br/>
+       <label class="btn btn-default" submit><input name="tec[]" type="checkbox" value="Ionic" class="badgebox" 
+       <?php echo $ionic ?> style="margin-top:5px;"/> <span class="badge" >&check;</span> Ionic:</label><br/>
     </div> 
     <div class="form-group col-md-3">  
-       <label class="btn btn-default" submit><input name="tec" type="checkbox" value="tec" class="badgebox" style="margin-top:5px;"/> <span class="badge" >&check;</span> Ionic:</label><br/>
-       <label class="btn btn-default" submit><input name="tec" type="checkbox" value="tec" class="badgebox" style="margin-top:5px;"/> <span class="badge" >&check;</span> Mensageria:</label><br/>
-       <label class="btn btn-default" submit><input name="tec" type="checkbox" value="tec" class="badgebox" style="margin-top:5px;"/> <span class="badge" >&check;</span> PHP:</label><br/>
-       <label class="btn btn-default" submit><input name="tec" type="checkbox" value="tec" class="badgebox" style="margin-top:5px;"/> <span class="badge" >&check;</span> Laravel:</label><br/>
+       <label class="btn btn-default" submit><input name="tec[]" type="checkbox" value="Mensageria" class="badgebox" 
+       <?php echo $mensageria ?> style="margin-top:5px;"/> <span class="badge" >&check;</span> Mensageria:</label><br/>
+       <label class="btn btn-default" submit><input name="tec[]" type="checkbox" value="PHP" class="badgebox" 
+       <?php echo $pHP ?> style="margin-top:5px;"/> <span class="badge" >&check;</span> PHP:</label><br/>
+       <label class="btn btn-default" submit><input name="tec[]" type="checkbox" value="Laravel" class="badgebox" 
+       <?php echo $laravel ?> style="margin-top:5px;"/> <span class="badge" >&check;</span> Laravel:</label><br/>
   </div> 
   </div> 
   </div> 
     
   <div id="actions" class="row">
     <div class="col-md-12">
-      <button type="submit" id="salvar"  <?php echo $desabled ?>  class="btn btn-primary">Salvar</button>
+      <button type="submit" id="salvar"    class="btn btn-primary">Salvar</button>
       <a href="index.php" class="btn btn-default">Cancelar</a>
     </div>
   </div>
 </form>
 
-  
-
 <?php include(FOOTER_TEMPLATE); ?>
+    <!-- Adicionando Javascript -->
+    <script>
+    function verificanome(input){
+        if(input.value=="" || input.value==" " || input.value.indexOf(' ')==-1 ){
+                alert( "Por favor, informe seu nome completo!" );
+                document.getElementById("nome").style.background  = "#f0b9b9";
+    }else       document.getElementById("nome").style.background  = "#a7f5bf";
+    }
+    function calculaIdade(dataNasc){
+         var dataAtual = new Date();
+         var anoAtual = dataAtual.getFullYear();
+         var anoNascParts = dataNasc.split('-');
+         var diaNasc =anoNascParts[2];
+         var mesNasc =anoNascParts[1];
+         var anoNasc =anoNascParts[0];
+         var idade = anoAtual - anoNasc;
+         var mesAtual = dataAtual.getMonth() + 1; 
+         //Se mes atual for menor que o nascimento, nao fez aniversario ainda; 
+         if(mesAtual < mesNasc){ idade--; 
+         } else {
+         //Se estiver no mes do nascimento, verificar o dia
+         if(mesAtual == mesNasc){ 
+         if(new Date().getDate() < diaNasc ){ 
+         //Se a data atual for menor que o dia de nascimento ele ainda nao fez aniversario
+         idade--; 
+         }} }
+        if(idade < 105)
+        document.getElementById("idade").value= idade;          
+        // return idade; 
+        }
+    
+    function verificaemail(input,campo){
+         var outroCampo = 3- campo;
+          var email = document.getElementById("email"+outroCampo).value;        
+         if(input.value.length == 0 ){ //Se o campo estiver limpo
+                alert( "Por favor, informe seu E-MAIL!" );
+                document.getElementById("email"+campo).style.background  = "#f0b9b9";
+              }else
+            if(input.value=="" || input.value.indexOf('@')==-1 || input.value.indexOf('.')==-1 ){
+                         alert( "Por favor, informe um E-MAIL válido!" );
+                document.getElementById("email"+campo).style.background  = "#f0b9b9";
+              } else 
+                if( email != "" && input.value != email){
+                     alert( "Por favor, Preencha os dois campos com o mesmo E-MAIL!" );
+                    document.getElementById("email"+campo).style.background  = "#f0b9b9";
+
+              } else {
+                document.getElementById("email"+campo).style.background  = "#a7f5bf";
+              }
+        }
+    </script>
+    

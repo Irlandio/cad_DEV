@@ -1,262 +1,108 @@
-<?php 
-  require_once('functions.php'); 
+
+ <?php 
+  require_once('functions.php');  
+  require_once('modal.php');
   edit();
 
 if (session_status() !== PHP_SESSION_ACTIVE) {//Verificar se a sessão não já está aberta.
 session_start();
 }
+    $dNasc = date('Y-m-d', strtotime($candidato['dNasc']));
+    
+    $c = $javascript = $nodejs = $angular = $react = $ionic = $mensageria = $pHP = $laravel = " ";
+    $tec = $candidato['tecnologias'];
 
-if(isset ($_GET['cepOrigID']))
-    verificaCamposGET();
+    if (strpos($tec, 'C#')          !== false) {$c          = 'checked';}
+    if (strpos($tec, 'Javascript')  !== false) {$javascript = 'checked';}
+    if (strpos($tec, 'Nodejs')      !== false) {$nodejs     = 'checked';}
+    if (strpos($tec, 'Angular')     !== false) {$angular    = 'checked';}
+    if (strpos($tec, 'React')       !== false) {$react      = 'checked';}
+    if (strpos($tec, 'Ionic')       !== false) {$ionic      = 'checked';}
+    if (strpos($tec, 'Mensageria')  !== false) {$mensageria = 'checked';}
+    if (strpos($tec, 'PHP')         !== false) {$pHP        = 'checked';}
+    if (strpos($tec, 'Laravel')     !== false) {$laravel    = 'checked';}
 
 include(HEADER_TEMPLATE); 
-{
-        if(isset ($_SESSION['cepOrig']) ){
-            
-               $cepOrigID   = $_SESSION['cepOrigID'];
-               $cepOrig     = $_SESSION['cepOrig']; 
-               $latO        = $_SESSION['lat1'];
-               $longO       = $_SESSION['longt1'];
-               $logra1      = $_SESSION['logra1'];
-               $endOrig     = $_SESSION['endOrig'];
-        }else{            
-               $cepOrigID   = $cep['cepOrig'];
-               $cepOrig     = $cep['cepOrig'];
-               $latO        = $cep['latO'];
-               $longO       = $cep['longO'];
-               $logra1      = $cep['endOrig'];
-               $cidade1     = $cep['endOrig'];
-               $endOrig     = $cep['endOrig'];
-             
-        }
-        if(isset ($_SESSION['cepD']) ){
-            
-               $cepDD      = $_SESSION['cepDID'];
-               $cepD       = $_SESSION['cepD']; 
-               $latD       = $_SESSION['lat2'];
-               $longD      = $_SESSION['longt2'];
-               $logra2     = $_SESSION['logra2'];
-               $cidade2    = $_SESSION['cidade2'];
-               $endDest    = $_SESSION['endDest'];
-        }else{            
-               $cepDID    = $cep['cepDest'];
-               $cepD      = $cep['cepDest'];
-               $latD      = $cep['latD'];
-               $longD     = $cep['longD']; 
-               $logra2    = $cep['endDest'];
-               $cidade1   = $cep['endDest'];
-               $endDest   = $cep['endDest'];
-        }
-        $distancia =   0.00;
-        if(is_numeric($latO) && is_numeric($longO) && is_numeric($latD) && is_numeric($longD))
-         $distancia =   calcDistancia($latO, $longO, $latD, $longD);
-}
-?>
 
+?> 
+    <head>
+    <title>Candidato</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <!-- Adicionando Javascript -->
-    <script>
-    
-    function limpa_formulario_cep(campo) {
-          //  Limpa valores do formulário de cep.
-                document.getElementById("latitude"+campo).value="";
-                document.getElementById("longitude"+campo).value="";
-                document.getElementById("end"+campo).value="";              
-    }
-    function pesquisacep1(valor,campo) {
-        //Nova variável "cep" somente com dígitos.
-        var cep = valor.replace(/\D/g, '');
-        //Verifica se campo cep possui valor informado.
-        if (cep != "") {
-            //Expressão regular para validar o CEP.
-            var validacep = /^[0-9]{8}$/;
-            //Valida o formato do CEP.
-            if(validacep.test(cep)) {
-                if(campo == 1)
-                    {
-                    document.getElementById("cepOrigID").value=document.getElementById("cepOrig").value;
-                    document.getElementById("cepDID").value="0";
-                    }
-                    else  
-                        if(campo == 2)
-                    {
-                    document.getElementById("cepDID").value=document.getElementById("cepD").value;
-                    document.getElementById("cepOrigID").value="0";
-                    }       
-                //Preenche os campos com "..." enquanto consulta webservice.
-              //  document.getElementById("latitude"+campo).value="Carregando...";
-             //   document.getElementById("longitude"+campo).value="Carregando...";
-             //   document.getElementById("end"+campo).value="Carregando...";               
-                //Executa um submit de botão.
-                document.formedit.submit(); 
-                //Cria um elemento javascript.
-                var script = document.createElement('script');
-                      
-            } 
-            else {                
-            alert("CEP invalido.");
-            limpa_formulario_cep(campo);
-            }
-        } 
-        else {              
-            alert("CEP invalido.");
-            limpa_formulario_cep(campo);
-        }
-    };
-      function submitform() {
-        document.formedit.submit();
-    }
-    </script>
-    
+
+    </head>
+
+<form action="edit.php?id=<?php echo $candidato['id']; ?>"  name="NForm"  method="post" >
+    <!-- Inicio do formulario POST (CADASTRO)-->
+  
 <h2>Atualizar Cadastro</h2>
 <!-- Campo que exibe os valores em Edição   -->
-<form action="edit.php?id=<?php echo $cep['id']; ?>"  name="formedit"  method="GET">
+<div class="row col-md-10" >
+  <!-- area de campos do form -->
   <hr />
-      <input type="hidden" name="id" value="<?php echo $cep['id']; ?>"  id="id">
-  <div class="row">
+  <div class="row" >
+    <div class="form-group col-md-11">
+      <label for="name"> Nome Completo</label>
+      <input id="nome" type="text" class="form-control"  value="<?php echo $candidato['nome'] ?>" name="nome"  onblur="verificanome(this);">
+    </div>	  
+    <div class="form-group col-md-11" id="myModal">
+      <label for="email"> E-mail</label>
+      <input id="email1" type="email" class="form-control" value="<?php echo $candidato['email']  ?>" name="email1" required  onblur="verificaemail(this,1);" Placeholder="fulano@email.com">
+    </div>
+    <div class="form-group col-md-11">
+      <input id="email2" type="email" class="form-control" value="<?php echo $candidato['email']  ?>" name="email2" required Placeholder="Repita seu E-mail"  onblur="verificaemail(this,2);">
+    </div>
+ 
     <div class="form-group col-md-2">
-      <label for="name">Atualizar CEP 1</label>
-        
-      <input id="cepOrig"  type="text" class="form-control" name="cepOrig" value="<?php echo $cepOrig; ?>" onblur="pesquisacep1(this.value,1);">
-      <input type="hidden" class="form-control" name="cepOrigID" value="<?php echo $cepOrig; ?>" id="cepOrigID">
-    </div>
-
+      <label for="campo3">Data de Nasc.</label>
+      <input type="date" class="form-control" name="datNasc" id="datNasc" autofocus
+      value="<?php echo $dNasc  ?>" onblur="calculaIdade(this.value);" min="1920-01-01" max="<?php echo date('Y-m-d', strtotime('-15 year')); ?>" required> <span class="validity"></span>
+    </div>     
+    <div class="form-group col-md-7">
+      <label for="campo3"> Likedin</label><br>
+           <input type="text" class="form-control" name="linkedin" value="<?php echo $candidato['Url_linkedin']  ?>" Placeholder="www.linkedin.com/in/www.linkedin.com/in/Fulano-De-Tal-999990025/">
+    </div>       
+    <div class="form-group col-md-1">
+      <label for="campo3">Idade</label>
+      <input type="text" class="form-control" readonly name="idade" id="idade" value="<?php echo $candidato['idade']  ?>" >
+    </div>        
+  </div>    
+  </div> 
+  <div class="row" >  
+    <div class="form-group col-md-8">
+      <label for="campo3"> Tecnologias</label><br/>
     <div class="form-group col-md-3">
-      <label for="campo2">Endereço 1</label>
-      <input type="text" class="form-control" name="endOrig" value="<?php echo $endOrig; ?>" readonly id="end1">
-      <input type="hidden" class="form-control" name="rua1" value="<?php echo $logra1; ?>" readonly id="rua1">
-      <input type="hidden" class="form-control" name="cidade1" value="<?php echo $cidade1; ?>" readonly id="cidade1">
-    </div>
+       <label class="btn btn-default" submit><input name="tec[]" type="checkbox" value="C#" class="badgebox" 
+       <?php echo $c ?> style="margin-top:5px;"/> <span class="badge" >&check;</span> C#:</label><br/>
+       <label class="btn btn-default" submit><input name="tec[]" type="checkbox" value="Javascript" class="badgebox" 
+       <?php echo $javascript ?> style="margin-top:5px;"/> <span class="badge" >&check;</span> Javascript:</label><br/>
+       <label class="btn btn-default" submit><input name="tec[]" type="checkbox" value="Nodejs" class="badgebox" 
+       <?php echo $nodejs ?> style="margin-top:5px;"/> <span class="badge" >&check;</span> Nodejs:</label><br/>
+    </div> 
+    <div class="form-group col-md-3">
+       <label class="btn btn-default" submit><input name="tec[]" type="checkbox" value="Angular" class="badgebox" 
+       <?php echo $angular ?> style="margin-top:5px;"/> <span class="badge" >&check;</span> Angular:</label><br/>
+       <label class="btn btn-default" submit><input name="tec[]" type="checkbox" value="React" class="badgebox" 
+       <?php echo $react ?> style="margin-top:5px;"/> <span class="badge" >&check;</span> React:</label><br/>
+       <label class="btn btn-default" submit><input name="tec[]" type="checkbox" value="Ionic" class="badgebox" 
+       <?php echo $ionic ?> style="margin-top:5px;"/> <span class="badge" >&check;</span> Ionic:</label><br/>
+    </div> 
+    <div class="form-group col-md-3">  
+       <label class="btn btn-default" submit><input name="tec[]" type="checkbox" value="Mensageria" class="badgebox" 
+       <?php echo $mensageria ?> style="margin-top:5px;"/> <span class="badge" >&check;</span> Mensageria:</label><br/>
+       <label class="btn btn-default" submit><input name="tec[]" type="checkbox" value="PHP" class="badgebox" 
+       <?php echo $pHP ?> style="margin-top:5px;"/> <span class="badge" >&check;</span> PHP:</label><br/>
+       <label class="btn btn-default" submit><input name="tec[]" type="checkbox" value="Laravel" class="badgebox" 
+       <?php echo $laravel ?> style="margin-top:5px;"/> <span class="badge" >&check;</span> Laravel:</label><br/>
+  </div> 
+  </div> 
+  </div> 
     
-    <div class="form-group col-md-3">
-      <label for="campo2">Coordenadas( Latitude / Longitude)</label>
-      <div class="row">
-
-        <dl class="dl-horizontal">
-            <dt><input type="text" class="form-control" name="latitude1" readonly value="<?php echo $latO; ?>" id="latitude1"></dt>
-            <dd><input type="text" class="form-control" name="longitude1" readonly value="<?php echo $longO; ?>" id="longitude1"></dd>
-        </dl>
-
-
-      </div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="form-group col-md-2">
-      <label for="campo2">Atualizar CEP 2</label>
-      <input  id="cepD" type="text" class="form-control" name="cepD" value="<?php echo $cepD ?>" onblur="pesquisacep1(this.value,2);" >
-      <input type="hidden" class="form-control" name="cepDID" value="<?php echo $cepD; ?>" id="cepDID">
-    </div>
-
-    <div class="form-group col-md-3">
-      <label for="campo2">Endereço 2</label>
-      <input type="text" class="form-control" name="endDest" value="<?php echo $endDest; ?>" readonly id="end2">
-      <input type="hidden" class="form-control" name="rua2" value="<?php echo $endDest; ?>" readonly id="rua2">
-      <input type="hidden" class="form-control" name="cidade2" value="<?php echo $endDest; ?>" readonly id="cidade2">
-    </div>
-
-    <div class="form-group col-md-3">
-      <label for="campo2">Coordenadas( Latitude / Longitude)</label>
-      <div class="row">
-
-        <dl class="dl-horizontal">
-            <dt><input type="text" class="form-control" name="latitude2" readonly value="<?php echo $latD; ?>"  id="latitude2"></dt>
-            <dd><input type="text" class="form-control" name="longitude2" readonly value="<?php echo $longD; ?>"  id="longitude2"></dd>
-        </dl>
-      </div>
-    </div>
-   
-    <div class="form-group col-md-2">
-      <label for="campo1">Distância Km</label>
-      <input type="text" class="form-control" name="cep['dist']" readonly value="<?php echo $distancia; ?>">
-      <input type="hidden" class="form-control" name="cep['criado']" disabled value="<?php echo $cep['criado']; ?>">
-      <input type="hidden" class="form-control" name="cep['modificado']" disabled value="<?php echo $cep['modificado']; ?>">
-    </div>
-
-  </div>
-    
-</form>
-
-<!-- Campo que exibe os valores Já cadastrados   -->
-  <hr />
-  <div class="row">
-    <div class="form-group col-md-2">
-      <label for="name">CEPs Cadastrados</label>
-        
-      <input id="cepOrigem"  type="text" class="form-control" name="cep0['cepOrig']" value="<?php echo $cep['cepOrig']; ?>" disabled>
-      <input type="text" class="form-control" name="cep0['cepDest']" value="<?php echo $cep['cepDest']; ?>"  disabled>
-    </div>
-
-    <div class="form-group col-md-3">
-      <label for="campo2">Endereço Cadastrados</label>
-      <input type="text" class="form-control" name="cep0['endOrig']" value="<?php echo $cep['endOrig']; ?>" disabled id="end1">
-      <input type="text" class="form-control" name="cep0['endDest']" value="<?php echo $cep['endDest']; ?>" disabled id="end2">
-    </div>
-    
-    <div class="form-group col-md-3">
-      <label for="campo2">Coordenadas( Lat / Long)</label>
-      <div class="row">
-
-        <dl class="dl-horizontal">
-            <dt><input type="text" class="form-control" name="cep0['latO']" disabled value="<?php echo $cep['latO']; ?>" id="latitude1"></dt>
-            
-            <dd><input type="text" class="form-control" name="cep0['longO']" disabled value="<?php echo $cep['longO']; ?>" id="longitude1"></dd>
-        </dl>
-      </div>
-      <div class="row">
-
-        <dl class="dl-horizontal">
-            <dt><input type="text" class="form-control" name="cep0['latD']" disabled value="<?php echo $cep['latD']; ?>"  id="latitude2"></dt>
-            <dd><input type="text" class="form-control" name="cep0['longD']" disabled value="<?php echo $cep['longD']; ?>"  id="longitude2"></dd>
-        </dl>
-      </div>
-    </div>
-  </div>
-    
-  <div class="row">
-   
-    <div class="form-group col-md-2">
-      <label for="campo1">Distância Cadastrada</label>
-      <input type="text" class="form-control" name="cep0['dist']" disabled value="<?php echo $cep['dist']; ?>">
-    </div>
-
-    <div class="form-group col-md-2">
-      <label for="campo3">Data de cadastro</label>
-      <input type="text" class="form-control" name="cep0['criado']" disabled value="<?php echo $cep['criado']; ?>">
-    </div>
-    <div class="form-group col-md-2">
-      <label for="campo3">Ultima modificação</label>
-      <input type="text" class="form-control" name="cep0['modificado']" disabled value="<?php echo $cep['modificado']; ?>">
-    </div>
-  </div>
-
-
-<!-- Campo que Guarda os valores em edição e à cadastrar   -->
-<form action="edit.php?id=<?php echo $cep['id']; ?>"  name="formedite"  method="post">
-  <hr />
-  <div class="row">
-      <input type="hidden" class="form-control" name="cep['cepOrig']"   value="<?php echo $cepOrig; ?>" >
-      <input type="hidden" class="form-control" name="cep['cepDest']"   value="<?php echo $cepD; ?>"  >
-      <input type="hidden" class="form-control" name="cep['endOrig']"   value="<?php echo $endOrig; ?>" >
-      <input type="hidden" class="form-control" name="cep['endDest']"   value="<?php echo $endDest; ?>" >
-      <input type="hidden" class="form-control" name="cep['latO']"      value="<?php echo $latO; ?>" >
-      <input type="hidden" class="form-control" name="cep['longO']"     value="<?php echo $longO; ?>" >
-      <input type="hidden" class="form-control" name="cep['latD']"      value="<?php echo $latD; ?>" >
-      <input type="hidden" class="form-control" name="cep['longD']"     value="<?php echo $longD; ?>"  >
-      <input type="hidden" class="form-control" name="cep['dist']"      value="<?php echo $distancia; ?>">
-      <input type="hidden" class="form-control" name="cep['criado']"    value="<?php echo $cep['criado']; ?>">
-      <input type="hidden" class="form-control" name="cep['modificado']"value="<?php echo $cep['modificado']; ?>">
-  </div>
-  <!--  -->
   <div id="actions" class="row">
     <div class="col-md-12">
-      <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+      <button type="submit" id="salvar"    class="btn btn-primary">Salvar</button>
       <a href="index.php" class="btn btn-default">Cancelar</a>
     </div>
   </div>
 </form>
 
 <?php include(FOOTER_TEMPLATE); ?>
-
-
-
